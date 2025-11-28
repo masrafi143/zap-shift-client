@@ -34,6 +34,7 @@ export const router = createBrowserRouter([
       {
         path: "send-parcel",
         Component: SendParcel,
+        loader: () => fetch("/serviceCenters.json").then((res) => res.json()),
       },
     ],
   },

@@ -1,8 +1,22 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
+import { useLoaderData } from 'react-router';
 
 const SendParcel = () => {
-    const { register, handleSubmit, formState: { errors } } = useForm();
+    const { register, handleSubmit, watch, formState: { errors } } = useForm();
+    const serviceCenters = useLoaderData();
+    console.log(serviceCenters);
+    const regionsDuplicate = serviceCenters.map(c => c.region);
+    const regions = [...new Set(regionsDuplicate)];
+    console.log(regions);
+
+    const senderRegion = watch('senderRegion');
+
+    const districtsByRegion = region => {
+        const regionDistricts = serviceCenters.filter(c=> c.region === region);
+        const districts = regionDistricts.map(d=> d.district);
+        return districts;
+    }
 
     const handleSendParcel = data => {
         console.log(data);
@@ -46,14 +60,39 @@ const SendParcel = () => {
                         {/* sender name */}
                         <label className="label">Sender Name</label>
                         <input type="text" {...register('senderName')} className="input w-full" placeholder="Sender Name" />
+                        {/* sender email */}
+                        <label className="label">Sender Email</label>
+                        <input type="email" {...register('senderEmail')} className="input w-full" placeholder="Sender Email" />
+
+                        {/* sender region */}
+                        <fieldset className="fieldset">
+                        <legend className="fieldset-legend">Sender Region</legend>
+                        <select {...register('senderRegion')} defaultValue="Pick a region" className="select">
+                            <option disabled={true}>Pick a region</option>
+                            {
+                                regions.map((r,i)=> <option key={i} value={r}>{r}</option>)
+                            }
+                        </select>
+                        <span className="label">Optional</span>
+                        </fieldset>
+
+                        {/* sender district */}
+                        <fieldset className="fieldset">
+                        <legend className="fieldset-legend">Sender District</legend>
+                        <select {...register('senderDistrict')} defaultValue="Pick a district" className="select">
+                            <option disabled={true}>Pick a district</option>
+                            {
+                                districtsByRegion(senderRegion).map((r,i)=> <option key={i} value={r}>{r}</option>)
+                            }
+                        </select>
+                        <span className="label">Optional</span>
+                        </fieldset>
 
                         {/* sender address */}
                         <label className="label mt-4">Sender Address</label>
                         <input type="text" {...register('senderAddress')} className="input w-full" placeholder="Sender Address" />
 
-                        {/* sender District */}
-                        <label className="label mt-4">Sender District</label>
-                        <input type="text" {...register('senderDistrict')} className="input w-full" placeholder="Sender District" />
+                    
                     </fieldset>
                     {/* receiver Details */}
                     <fieldset className="fieldset">
@@ -61,6 +100,9 @@ const SendParcel = () => {
                         {/* receiver name */}
                         <label className="label">Receiver Name</label>
                         <input type="text" {...register('receiverName')} className="input w-full" placeholder="Receiver Name" />
+                        {/* receiver email */}
+                        <label className="label">Receiver Email</label>
+                        <input type="email" {...register('receiverEmail')} className="input w-full" placeholder="Receiver Email" />
 
                         {/* receiver address */}
                         <label className="label mt-4">Receiver Address</label>

@@ -8,6 +8,7 @@ const Navbar = () => {
   const links = <div className="md:space-x-3">
   <NavLink to='/services'>Services</NavLink>
   <NavLink to='/coverage'>Coverage</NavLink>
+  <NavLink to='/send-parcel'>Send-Parcel</NavLink>
   <NavLink to='/about-us'>About-us</NavLink>
   <NavLink to='/pricing'>Pricing</NavLink>
   <NavLink to='/blog'>Blog</NavLink>

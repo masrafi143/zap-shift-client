@@ -3,22 +3,41 @@ import Logo from "../../components/Logo/logo";
 import { Link, NavLink } from "react-router";
 import useAuth from "../../hooks/useAuth";
 
-const Navbar = () => {
-  const {user, logOut} = useAuth();
-  const links = <div className="md:space-x-3">
-  <NavLink to='/services'>Services</NavLink>
-  <NavLink to='/coverage'>Coverage</NavLink>
-  <NavLink to='/send-parcel'>Send-Parcel</NavLink>
-  <NavLink to='/about-us'>About-us</NavLink>
-  <NavLink to='/pricing'>Pricing</NavLink>
-  <NavLink to='/blog'>Blog</NavLink>
-  <NavLink to='/contact'>Contact</NavLink>
-  </div>
-  const handleLogOut = () =>{
+const NavBar = () => {
+  const { user, logOut } = useAuth();
+
+  const handleLogOut = () => {
     logOut()
-    .then()
-    .catch(err=>console.log(err));
-  }
+      .then()
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const links = (
+    <>
+      <li>
+        <NavLink to="">Services</NavLink>
+      </li>
+      <li>
+        <NavLink to="">About Us</NavLink>
+      </li>
+      <li>
+        <NavLink to="/send-parcel">Send Parcel</NavLink>
+      </li>
+      <li>
+        <NavLink to="/coverage">Coverage</NavLink>
+      </li>
+
+      {user && (
+        <>
+          <li>
+            <NavLink to="/dashboard/my-parcels">My Parcels</NavLink>
+          </li>
+        </>
+      )}
+    </>
+  );
   return (
     <div className="navbar bg-base-100 shadow-sm">
       <div className="navbar-start">
@@ -47,23 +66,29 @@ const Navbar = () => {
             {links}
           </ul>
         </div>
-        <a className="text-xl">
-          <Logo />
+        <a className="btn btn-ghost text-xl">
+          <Logo></Logo>
         </a>
       </div>
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1">{links}</ul>
       </div>
       <div className="navbar-end">
-        {
-          user?
-          <a onClick={handleLogOut} className="btn">LogOut</a> :
-          <Link to={'/login'} className="btn">Login</Link>
-        }
-        <Link to={'/rider'} className="btn btn-primary text-black mx-3">Be a rider</Link>
+        {user ? (
+          <a onClick={handleLogOut} className="btn">
+            Log Out
+          </a>
+        ) : (
+          <Link className="btn" to="/login">
+            Log in
+          </Link>
+        )}
+        <Link className="btn btn-primary text-black mx-4" to="/rider">
+          Be a Rider
+        </Link>
       </div>
     </div>
   );
 };
 
-export default Navbar;
+export default NavBar;
